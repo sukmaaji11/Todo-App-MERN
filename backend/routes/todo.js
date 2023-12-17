@@ -1,27 +1,32 @@
-const express = require('express');
+const express = require("express");
 const {
   getTodo,
   getOneTodo,
   createTodo,
   deleteTodo,
   updateTodo,
-} = require('../controllers/todoController');
+} = require("../controllers/todoController");
+
+const requireAuth = require("../middleware/requireAuth");
 
 const router = express.Router();
 
+// Require auth for all todo
+router.use(requireAuth);
+
 // Get All Todo
-router.get('/', getTodo);
+router.get("/", getTodo);
 
 // Get a Single Todo
-router.get('/:id', getOneTodo);
+router.get("/:id", getOneTodo);
 
 // Add New Todo
-router.post('/', createTodo);
+router.post("/", createTodo);
 
 // Delete Todo
-router.delete('/:id', deleteTodo);
+router.delete("/:id", deleteTodo);
 
 //Update Todo
-router.patch('/:id', updateTodo);
+router.patch("/:id", updateTodo);
 
 module.exports = router;

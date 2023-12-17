@@ -1,17 +1,25 @@
-import { useTodoContext } from '../hooks/useTodoContext';
+import { useTodoContext } from "../hooks/useTodoContext";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 // Date Time
-import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
 const TodoDetails = ({ todo }) => {
   const { dispatch } = useTodoContext();
+  const { user } = useAuthContext();
   const handleClick = async () => {
-    const response = await fetch('/api/v01/todo/' + todo._id, {
-      method: 'DELETE',
+    if (!user) {
+      return;
+    }
+    const response = await fetch("/api/v01/todo/" + todo._id, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
     });
     const json = await response.json();
     if (response.ok) {
-      dispatch({ type: 'DELETE_TODO', payload: json });
+      dispatch({ type: "DELETE_TODO", payload: json });
     }
   };
   return (

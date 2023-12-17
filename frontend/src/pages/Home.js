@@ -1,22 +1,32 @@
-import { useEffect } from 'react';
-import { useTodoContext } from '../hooks/useTodoContext';
+import { useEffect } from "react";
+import { useTodoContext } from "../hooks/useTodoContext";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 // Components
-import TodoDetails from '../components/TodoDetails';
-import TodoForm from '../components/TodoForm';
+import TodoDetails from "../components/TodoDetails";
+import TodoForm from "../components/TodoForm";
 
 const Home = () => {
   const { todo, dispatch } = useTodoContext();
+  const { user } = useAuthContext();
+
   useEffect(() => {
     const fetchTodo = async () => {
-      const response = await fetch('/api/v01/todo');
+      const response = await fetch("/api/v01/todo", {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
       const json = await response.json();
       if (response.ok) {
-        dispatch({ type: 'SET_TODO', payload: json });
+        dispatch({ type: "SET_TODO", payload: json });
       }
     };
-    fetchTodo();
-  }, [dispatch]);
+    if (user) {
+      fetchTodo();
+    }
+  }, [dispatch, user]);
+
   return (
     <div className="Home">
       <TodoForm />
