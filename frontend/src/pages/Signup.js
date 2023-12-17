@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { useSignup } from "../hooks/useSignup";
+import { useState } from 'react';
+import { useSignup } from '../hooks/useSignup';
 
 const Signup = () => {
-  const [name, setName] = useState("");
-  const [gender, setGender] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [name, setName] = useState('');
+  const [gender, setGender] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const { signup, error, isLoading } = useSignup();
 
   const handleSubmit = async (e) => {
@@ -16,6 +16,7 @@ const Signup = () => {
   return (
     <form className="signup" onSubmit={handleSubmit}>
       <h3>Sign Up</h3>
+      {error && <div className="error">{error}</div>}
       <label>Name</label>
       <input
         type="text"
@@ -25,7 +26,7 @@ const Signup = () => {
       />
       <label>Gender</label>
       <select value={gender} onChange={(e) => setGender(e.target.value)}>
-        <option value=""></option>
+        <option value="">Please Select One</option>
         <option value="Male">Male</option>
         <option value="Female">Female</option>
       </select>
@@ -43,8 +44,8 @@ const Signup = () => {
         value={password}
         placeholder="Password"
       />
+      <p className="password-instruction"></p>
       <button disabled={isLoading}>Sign Up</button>
-      {error && <div className="error">{error}</div>}
     </form>
   );
 };
